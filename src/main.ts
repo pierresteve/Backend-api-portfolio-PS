@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { VersioningType, Logger } from '@nestjs/common';
+import { VersioningType, Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -11,6 +11,7 @@ async function bootstrap() {
     defaultVersion: '1',
   });
   app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe());
   const config = new DocumentBuilder()
     .setTitle('Backend API Portfolio Steve')
     .setDescription('API documentation for the backend of Steve\'s portfolio')
@@ -23,7 +24,7 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0', () => {
     Logger.verbose(`Application is running on PORT: ${process.env.PORT}`);
     Logger.verbose(`Application is running on: http://localhost:${process.env.PORT}`);
-    Logger.verbose(`Swagger is running on: http://localhost:${process.env.PORT}/api/docs`);
+    Logger.verbose(`API Documentation is running on: http://localhost:${process.env.PORT}/api/docs`);
   });
 }
 bootstrap();
