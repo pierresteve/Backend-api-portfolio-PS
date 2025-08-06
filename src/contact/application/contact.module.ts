@@ -3,6 +3,8 @@ import { ContactController } from '../presenters/http/contact.controller';
 import { ContactService } from './contact.service';
 import { GetAllContactUseCase } from './use-cases/get-all-contact.use-case';
 import { ContactRepository } from '../infrastructure/persistence/ORM/repositories/contact.repository';
+import { CreateContactUseCase } from './use-cases/create-contact.use-case';
+import { SoftDeleteUseCase } from './use-cases/soft-delete.use-case';
 
 @Module({
     imports: [],
@@ -13,6 +15,8 @@ import { ContactRepository } from '../infrastructure/persistence/ORM/repositorie
     providers: [
         ContactService,
         GetAllContactUseCase,
+        CreateContactUseCase,
+        SoftDeleteUseCase,
         {
             provide: 'ContactRepositoryPort',
             useClass: ContactRepository, 
@@ -20,7 +24,8 @@ import { ContactRepository } from '../infrastructure/persistence/ORM/repositorie
     ],
     exports: [
         ContactService,
-        GetAllContactUseCase
+        GetAllContactUseCase,
+        CreateContactUseCase
     ]
 })
 export class ContactModule {}

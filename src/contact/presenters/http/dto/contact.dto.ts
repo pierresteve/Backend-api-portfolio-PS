@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty } from "class-validator";
 
-export default class ContactDto{  
+export default class CreateContactDto{  
       @ApiProperty({
         description: 'Name of the person contacting',
         example: 'John Doe',
@@ -10,7 +10,7 @@ export default class ContactDto{
     
       @ApiProperty({
         description: 'Email address of the person contacting',
-        example: 'www.example.com',
+        example: 'example@gmail.com',
       })
       @IsEmail()
       email?: string;
@@ -28,5 +28,5 @@ export default class ContactDto{
       })    
       @IsNotEmpty()
       message!: string;
-        
+      
 }

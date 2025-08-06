@@ -3,6 +3,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { ContactRepositoryPort } from '../../../../domain/ports/contact-repository.port';
 
 import { Contact } from '../entities/contact.entity';
+import CreateContactDto from 'src/contact/presenters/http/dto/contact.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ContactRepository implements ContactRepositoryPort {
@@ -19,9 +20,11 @@ export class ContactRepository implements ContactRepositoryPort {
     return contacts;
   }
 
-  async save(entity: Contact): Promise<Contact> {
-    await this.em.persistAndFlush(entity);
-    return entity;
+  async save(dto: CreateContactDto){
+    this.logger.verbose(dto)
+    const contact = this.em.create(Contact,{...dto});
+    await this.em.persistAndFlush(contact);
+    return contact;
   }
 
   async update(id: string, entityData: Partial<Contact>): Promise<Contact> {
@@ -33,11 +36,14 @@ export class ContactRepository implements ContactRepositoryPort {
     return entity;
   }
 
-  async delete(id: string): Promise<boolean> {
-    const entity = await this.findById(id);
-    if (!entity) return false;
-    
-    await this.em.removeAndFlush(entity);
-    return true;
+  async softDelete(id: string): Promise<Contact> {
+    const contact = await this.em.findOne(Contact, {id});
+    if (!contact){
+       throw new Error("Contact not found");
+    } 
+    this.em.assign(contact, {deletedAt: new Date()});
+
+    await this.em.flush()
+    return contact;
   }
 }

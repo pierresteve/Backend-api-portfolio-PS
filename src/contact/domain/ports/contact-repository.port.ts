@@ -1,4 +1,5 @@
 import { Contact } from "src/contact/infrastructure/persistence/ORM/entities/contact.entity";
+import CreateContactDto from "src/contact/presenters/http/dto/contact.dto";
 
 /**
  * Port interface for Contact repository
@@ -8,8 +9,8 @@ import { Contact } from "src/contact/infrastructure/persistence/ORM/entities/con
 export interface ContactRepositoryPort {
   findById(id: string): Promise<Contact | null>;
   findAll(): Promise<Contact[]>;
-  save(entity: Contact): Promise<Contact>;
+  save(dto: CreateContactDto):Promise<any>;
   update(id: string, entity: Partial<Contact>): Promise<Contact>;
-  delete(id: string): Promise<boolean>;
+  softDelete(id: string): Promise<Contact>;
   // Add more methods as needed
 }

@@ -2,17 +2,17 @@ import { Inject, Injectable } from "@nestjs/common";
 import type { ContactRepositoryPort } from "../../domain/ports/contact-repository.port";
 
 @Injectable()
-export class GetAllContactUseCase{
+export class SoftDeleteUseCase{
     constructor(
        @Inject("ContactRepositoryPort") private readonly contactRepository: ContactRepositoryPort,
     ){}
 
-    async execute(){
+    async execute(id: string){
         try {
-        return await this.contactRepository.findAll();
+        
+            return await this.contactRepository.softDelete(id);
             
         } catch (error) {
-            console.log(error)
             throw error;
         }
     }
